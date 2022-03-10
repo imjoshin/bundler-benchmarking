@@ -1,0 +1,25 @@
+{
+  "name": "bundler-benchmarking",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/j0sh77/bundler-benchmarking",
+  "author": "Josh <jcjohnson77@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.17.3",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2"
+  },
+  "devDependencies": {
+    "@types/react": "^17.0.40",
+    "@types/react-dom": "^17.0.13",
+    "ts-loader": "^9.2.7",
+    "typescript": "^4.6.2",
+    "webpack": "^5.70.0",
+    "webpack-cli": "^4.9.2"
+  },
+  "scripts": {
+    "serve": "node scripts/serve.js",
+    "build:webpack": "webpack --mode development"
+  }
+}
