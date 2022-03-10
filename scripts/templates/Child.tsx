@@ -10,7 +10,7 @@ const Child = () => {
     fontSize: `${fontSize}px`
   }
 
-  return <div style={style}>
+  return <div className="child-%CHILD_ID%" style={style}>
     <div>
       Depth %DEPTH%, Child %CHILD%
     </div>

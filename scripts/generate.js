@@ -30,9 +30,10 @@ const baseOutputPath = path.resolve(__dirname, '..', 'src', 'Generated')
 const templates = {
   display: fs.readFileSync(path.resolve(__dirname, 'templates', 'Display.tsx')).toString(),
   child: fs.readFileSync(path.resolve(__dirname, 'templates', 'Child.tsx')).toString(),
+  childStyle: fs.readFileSync(path.resolve(__dirname, 'templates', 'Child.css')).toString(),
 }
 
-function generateDepth(currentPath, depth, maxDepth, child, children, styles) {
+function generateDepth(currentPath, id, depth, maxDepth, child, children, styles) {
   console.log({currentPath, depth, maxDepth, child, children, styles})
   const imports = []
   const childObjects = []
@@ -42,22 +43,30 @@ function generateDepth(currentPath, depth, maxDepth, child, children, styles) {
       const nextPath = path.resolve(currentPath, `Child${i}`)
       imports.push(`import Child${i} from "./Child${i}"`)
       childObjects.push(`      <Child${i} />`)
-      generateDepth(nextPath, depth + 1, maxDepth, i, children, styles)
+      generateDepth(nextPath, `${id}-${i}`, depth + 1, maxDepth, i, children, styles)
     }
+  }
+
+  fs.mkdirSync(currentPath, {recursive: true})
+
+  if (styles) {
+    const styleContent = templates.childStyle
+      .replace(/%DEPTH%/g, depth)
+      .replace(/%CHILD%/g, child)
+      .replace(/%CHILD_ID%/g, id)
+
+    fs.writeFileSync(path.resolve(currentPath, 'index.css'), styleContent)
+    imports.push(`import "./index.css"`)
   }
 
   const childContent = (depth === 0 ? templates.display : templates.child)
     .replace(/%DEPTH%/g, depth)
     .replace(/%CHILD%/g, child)
+    .replace(/%CHILD_ID%/g, id)
     .replace(/%IMPORTS%/, imports.join("\n"))
     .replace(/%CHILDREN%/g, childObjects.join("\n"))
-
-  fs.mkdirSync(currentPath, {recursive: true})
   fs.writeFileSync(path.resolve(currentPath, 'index.tsx'), childContent)
 }
 
-// const displayContent = templates.display
-// fs.writeFileSync(path.resolve(baseOutputPath, 'index.tsx'), displayContent)
-
 fs.rmSync(baseOutputPath, {recursive: true, force: true})
-generateDepth(baseOutputPath, 0, args.depth, 1, args.children, args.styles)
+generateDepth(baseOutputPath, 'id', 0, args.depth, 1, args.children, args.styles)

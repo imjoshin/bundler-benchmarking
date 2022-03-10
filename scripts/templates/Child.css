@@ -1,0 +1,8 @@
+.child-%CHILD_ID% {
+  color: white;
+  transition: color 0.25s ease;
+}
+
+.child-%CHILD_ID%:hover {
+  color: purple;
+}
