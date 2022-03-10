@@ -1,5 +1,6 @@
 const path = require('path')
 const fs = require('fs')
+const cliProgress = require('cli-progress');
 
 const args = require('yargs')
   .scriptName("generate")
@@ -33,8 +34,15 @@ const templates = {
   childStyle: fs.readFileSync(path.resolve(__dirname, 'templates', 'Child.css')).toString(),
 }
 
+const progress = new cliProgress.SingleBar({
+  barCompleteChar: '█',
+  barIncompleteChar: ' ',
+}, cliProgress.Presets.shades_classic)
+
+// TODO this count is off, so fix it someday
+progress.start(args.children ** (args.depth + 1) - 1, 0)
+
 function generateDepth(currentPath, id, depth, maxDepth, child, children, styles) {
-  console.log({currentPath, depth, maxDepth, child, children, styles})
   const imports = []
   const childObjects = []
 
@@ -66,7 +74,10 @@ function generateDepth(currentPath, id, depth, maxDepth, child, children, styles
     .replace(/%IMPORTS%/, imports.join("\n"))
     .replace(/%CHILDREN%/g, childObjects.join("\n"))
   fs.writeFileSync(path.resolve(currentPath, 'index.tsx'), childContent)
+
+  progress.increment()
 }
 
 fs.rmSync(baseOutputPath, {recursive: true, force: true})
 generateDepth(baseOutputPath, 'id', 0, args.depth, 1, args.children, args.styles)
+progress.stop()
