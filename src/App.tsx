@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Display } from "./Generated/Display"
+import Generated from "./Generated"
 import "./App.css"
 
 const App = () => {
@@ -7,7 +7,7 @@ const App = () => {
     <div className="container">
       <div className="app">
         <h1>Bundler Benchmarking - {process.env.BUNDLER_NAME} </h1>
-        <Display />
+        <Generated />
       </div>
     </div>
   )
