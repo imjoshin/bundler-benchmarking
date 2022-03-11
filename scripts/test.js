@@ -49,9 +49,9 @@ const execute = (cmd, showCommand = true) => {
 }
 
 const tests = {
-  children: [1, 3, 5, 8],
+  children: [1, 3, 5],
   depth: [1, 3, 5],
-  styles: [true, false],
+  styles: [true],
   iterations: 5,
 }
 
@@ -91,11 +91,11 @@ async function test(bundler, children, depth, styles, iteration) {
 function formatResults(c, d, s, results) {
   const bundlers = Object.keys(results).sort()
   const success = bundlers.map((b) => results[b].success * 100 + "%")
-  const time = bundlers.map((b) => results[b].time + "s")
+  const time = bundlers.map((b) => Math.round(results[b].time * 100) / 100 + "s")
   const size = bundlers.map((b) => Math.round(results[b].size / 1024) + "kb")
 
   const output = [
-    `### Results with children=${c}, depth=${d}, and styles=${s ? 'true' : 'false'}`,
+    `### children=${c}, depth=${d}, styles=${s ? 'true' : 'false'}`,
     `||${bundlers.join("|")}|`,
     `|---|${bundlers.map(() => "---").join("|")}|`,
     `|Success Rate|${success.join("|")}|`,
@@ -108,7 +108,9 @@ function formatResults(c, d, s, results) {
 
 // TODO run two builds to measure second build
 async function runTests() {
-  let finalResults = []
+  const resultsFile = path.resolve(__dirname, '..', 'results.md')
+  fs.writeFileSync(resultsFile, "")
+
   for (const c of tests.children) {
     for (const d of tests.depth) {
       for (const s of tests.styles) {
@@ -136,12 +138,11 @@ async function runTests() {
         }
 
         const formatted = formatResults(c, d, s, results)
-        finalResults.push(formatted)
+        fs.appendFileSync(resultsFile, formatted + "\n\n");
       }
     }
   }
 
-  fs.writeFileSync(path.resolve(__dirname, '..', 'results.md'), finalResults.join("\n\n"))
 }
 
 runTests()

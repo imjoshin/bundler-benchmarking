@@ -82,6 +82,20 @@ If you'd like to add a new bundler, please do!
 If you run a new test, please replace the results here with your results.md that was generated.
 -->
 
+### children=1, depth=1, styles=true
+||esbuild|parcel|rollup|webpack|
+|---|---|---|---|---|
+|Success Rate|100%|100%|100%|100%|
+|Build Time|0.18s|0.82s|1.77s|3.18s|
+|Bundle Size|130kb|3kb|2kb|268kb|
+
+### children=1, depth=3, styles=true
+||esbuild|parcel|rollup|webpack|
+|---|---|---|---|---|
+|Success Rate|100%|100%|100%|100%|
+|Build Time|0.18s|0.9s|1.83s|3.24s|
+|Bundle Size|131kb|6kb|3kb|273kb|
+
 
 ## License
 [MIT](https://choosealicense.com/licenses/mit/)
