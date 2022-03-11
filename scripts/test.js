@@ -3,8 +3,7 @@ const fs = require('fs')
 const cliProgress = require('cli-progress')
 const util = require(`util`)
 const exec = util.promisify(require(`child_process`).exec)
-
-const availableBundlers = ['esbuild', 'parcel', 'rollup', 'webpack']
+const {availableBundlers, testCases} = require('../tests')
 
 const Reset = "\x1b[0m"
 const Dim = "\x1b[2m"
@@ -46,13 +45,6 @@ const execute = (cmd, showCommand = true) => {
   }
 
   return exec(cmd)
-}
-
-const tests = {
-  children: [1, 3, 5],
-  depth: [1, 3, 5],
-  styles: [true],
-  iterations: 5,
 }
 
 async function test(bundler, children, depth, styles, iteration) {
@@ -111,9 +103,9 @@ async function runTests() {
   const resultsFile = path.resolve(__dirname, '..', 'results.md')
   fs.writeFileSync(resultsFile, "")
 
-  for (const c of tests.children) {
-    for (const d of tests.depth) {
-      for (const s of tests.styles) {
+  for (const c of testCases.children) {
+    for (const d of testCases.depth) {
+      for (const s of testCases.styles) {
         await execute(`yarn generate -c ${c} -d ${d} -s ${s ? 'true' : 'false'}`)
 
         let results = {}
@@ -121,7 +113,7 @@ async function runTests() {
         for (bundler of bundlers) {
           let final = {success: 0, time: 0, size: 0}
 
-          for (const i of [...Array(tests.iterations).keys()]) {
+          for (const i of [...Array(testCases.iterations).keys()]) {
             const result = await test(bundler, c, d, s, i)
             final.success += result.success ? 1 : 0
             if (result.success) {
@@ -131,9 +123,9 @@ async function runTests() {
           }
 
           results[bundler] = {
-            success: final.success / tests.iterations,
-            time: final.time / tests.iterations,
-            size: final.size / tests.iterations,
+            success: final.success / testCases.iterations,
+            time: final.time / testCases.iterations,
+            size: final.size / testCases.iterations,
           }
         }
 

@@ -58,7 +58,7 @@ If you'd like to add a new bundler, please do!
 1. Add the needed dependencies
 2. Create the config file (if any)
 3. Add a `build:$BUNDLER` script to `package.json`
-4. Add the bundler name to `availableBundlers` in `scripts/test.js`
+4. Add the bundler name to `availableBundlers` in `./tests.js`
 5. Run `yarn test`
 6. Update this README's results below
 
