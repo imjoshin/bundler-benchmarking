@@ -74,7 +74,6 @@ If you'd like to add a new bundler, please do!
 ## Known Issues
 
 - Parcel configuration isn't set to render in browser
-- Rollup configuration isn't set to render in browser
 
 
 ## Results

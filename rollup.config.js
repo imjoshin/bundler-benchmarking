@@ -1,7 +1,9 @@
 import typescript from '@rollup/plugin-typescript'
 import css from "rollup-plugin-import-css"
-import babel from 'rollup-plugin-babel';
-import injectProcessEnv from 'rollup-plugin-inject-process-env';
+import commonjs from '@rollup/plugin-commonjs';
+import resolve from '@rollup/plugin-node-resolve';
+import replace from '@rollup/plugin-replace';
+import peerDepsExternal from 'rollup-plugin-peer-deps-external';
 import {uglify} from 'rollup-plugin-uglify';
 import pkg from './package.json'
 
@@ -17,15 +19,18 @@ export default {
     }
   },
   plugins: [
+    peerDepsExternal(),
+    resolve({
+      browser: true,
+      dedupe: ['react', 'react-dom'],
+    }),
+    replace({
+      'process.env.NODE_ENV': JSON.stringify('production'),
+      'process.env.BUNDLER_NAME': JSON.stringify('rollup'),
+    }),
+    commonjs(),
     typescript(),
     css(),
-    injectProcessEnv({ 
-      BUNDLER_NAME: 'rollup',
-    }),
-    babel({ 
-        exclude: 'node_modules/**',
-        presets: ['@babel/env', '@babel/preset-react']
-    }),
     uglify(),
   ]
 }
