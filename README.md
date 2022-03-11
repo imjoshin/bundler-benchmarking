@@ -63,6 +63,13 @@ If you'd like to add a new bundler, please do!
 6. Update this README's results below
 
 
+## Future Features
+
+- Measure builds in a `watch` mode
+- Measure a second rebuild
+- Measure a second rebuild with files changed
+
+
 ## Known Issues
 
 - Parcel configuration isn't set to render in browser
