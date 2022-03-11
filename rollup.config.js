@@ -2,6 +2,7 @@ import typescript from '@rollup/plugin-typescript'
 import css from "rollup-plugin-import-css"
 import babel from 'rollup-plugin-babel';
 import injectProcessEnv from 'rollup-plugin-inject-process-env';
+import {uglify} from 'rollup-plugin-uglify';
 import pkg from './package.json'
 
 export default {
@@ -24,6 +25,7 @@ export default {
     babel({ 
         exclude: 'node_modules/**',
         presets: ['@babel/env', '@babel/preset-react']
-    })
+    }),
+    uglify(),
   ]
 }
