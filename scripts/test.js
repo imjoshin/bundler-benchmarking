@@ -86,8 +86,17 @@ function formatResults(c, d, s, results) {
   const time = bundlers.map((b) => Math.round(results[b].time * 100) / 100 + "s")
   const size = bundlers.map((b) => Math.round(results[b].size / 1024) + "kb")
 
+  let totalComponents = (c - c ** (d + 1)) / (1 - c) + 1
+  if (c === 1) {
+    totalComponents = d + 1
+  } else if (d === 1) {
+    totalComponents = c + 1
+  }
+
   const output = [
-    `### children=${c}, depth=${d}, styles=${s ? 'true' : 'false'}`,
+    `### Total components: ${totalComponents}`, 
+    `children=${c}, depth=${d}, styles=${s ? 'true' : 'false'}`,
+    ``,
     `||${bundlers.join("|")}|`,
     `|---|${bundlers.map(() => "---").join("|")}|`,
     `|Success Rate|${success.join("|")}|`,
@@ -103,9 +112,9 @@ async function runTests() {
   const resultsFile = path.resolve(__dirname, '..', 'results.md')
   fs.writeFileSync(resultsFile, "")
 
-  for (const c of testCases.children) {
-    for (const d of testCases.depth) {
-      for (const s of testCases.styles) {
+  for (const s of testCases.styles) {
+    for (const c of testCases.children) {
+      for (const d of testCases.depth) {
         await execute(`yarn generate -c ${c} -d ${d} -s ${s ? 'true' : 'false'}`)
 
         let results = {}
