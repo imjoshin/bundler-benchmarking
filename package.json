@@ -17,6 +17,7 @@
     "@types/react": "^17.0.40",
     "@types/react-dom": "^17.0.13",
     "cli-progress": "^3.10.0",
+    "esbuild": "^0.14.25",
     "parcel": "^2.3.2",
     "rollup": "^2.70.0",
     "rollup-plugin-import-css": "^3.0.2",
@@ -32,6 +33,7 @@
     "serve": "node scripts/serve.js",
     "build:webpack": "webpack",
     "build:parcel": "parcel build src/index.tsx",
-    "build:rollup": "rollup -c"
+    "build:rollup": "rollup -c",
+    "build:esbuild": "esbuild src/index.tsx --bundle --outfile=dist/app.js --target=chrome58 --define:process.env.BUNDLER_NAME='\"esbuild\"'"
   }
 }
