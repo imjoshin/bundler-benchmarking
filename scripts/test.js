@@ -69,10 +69,17 @@ async function test(bundler, children, depth, styles, iteration) {
   const elapsed = Math.round((Date.now() - start) / 10) / 100;
   const status = success ? 'succeeded' : `${Red}errored${Reset}`
 
-  const bundleStat = fs.statSync(path.resolve(__dirname, "..", "dist", "app.js"))
+  const dist = path.resolve(__dirname, "..", "dist")
+  const bundleStat = fs.statSync(path.resolve(dist, "app.js"))
+  let bundleSize = bundleStat.size
+
+  if (!fs.existsSync(path.resolve(dist, 'app.css'))) {
+    const styleStat = fs.statSync(path.resolve(dist, "app.js"))
+    bundleSize += styleStat.size
+  }
 
   // TODO average, better output, get size of bundle, etc?
-  console.log(`${bundler} ${status} after ${elapsed}s with ${children} children and a depth of ${depth}. Bundle size: ${bundleStat.size}`)
+  console.log(`${bundler} ${status} after ${elapsed}s with ${children} children and a depth of ${depth}. Bundle size: ${bundleSize}`)
 }
 
 // TODO run two builds to measure second build
