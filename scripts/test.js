@@ -49,10 +49,10 @@ const execute = (cmd, showCommand = true) => {
 }
 
 const tests = {
-  children: [1, 3],
-  depth: [1, 3],
+  children: [1, 3, 5, 8],
+  depth: [1, 3, 5],
   styles: [true, false],
-  iterations: 1,
+  iterations: 5,
 }
 
 async function test(bundler, children, depth, styles, iteration) {
@@ -118,7 +118,7 @@ async function runTests() {
 
         for (bundler of bundlers) {
           let final = {success: 0, time: 0, size: 0}
-          
+
           for (const i of [...Array(tests.iterations).keys()]) {
             const result = await test(bundler, c, d, s, i)
             final.success += result.success ? 1 : 0
