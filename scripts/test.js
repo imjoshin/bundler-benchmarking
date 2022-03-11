@@ -60,7 +60,6 @@ const tests = [
   {children: 10, depth: 1},
   {children: 10, depth: 3},
   {children: 10, depth: 5},
-  {children: 10, depth: 8},
 ]
 
 // TODO run two builds to measure second build
@@ -71,11 +70,19 @@ async function runTests() {
     for (bundler of bundlers) {
       await execute(`yarn clean`)
       const start = Date.now()
-      await execute(`yarn build:${bundler}`)
+      let success = true
+      
+      try {
+        await execute(`yarn build:${bundler}`)
+      } catch {
+        success = false
+      }
+
       const elapsed = Math.round((Date.now() - start) / 10) / 100;
+      const status = success ? 'succeeded' : `${Red}errored${Reset}`
 
       // TODO average, better output, get size of bundle, etc?
-      console.log(`${bundler} took ${elapsed}s with ${children} children and a depth of ${depth}`)
+      console.log(`${bundler} ${status} after ${elapsed}s with ${children} children and a depth of ${depth}`)
     }
   }
 }
