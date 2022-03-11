@@ -39,8 +39,14 @@ const progress = new cliProgress.SingleBar({
   barIncompleteChar: ' ',
 }, cliProgress.Presets.shades_classic)
 
-// TODO this count is off, so fix it someday
-progress.start(((args.children - args.children ** (args.depth + 1)) / (1 - args.children)) + 1, 0)
+let totalComponents = (args.children - args.children ** (args.depth + 1)) / (1 - args.children) + 1
+if (args.children === 1) {
+  totalComponents = args.depth + 1
+} else if (args.depth === 1) {
+  totalComponents = args.children + 1
+}
+
+progress.start(totalComponents, 0)
 
 function generateDepth(currentPath, id, depth, maxDepth, child, children, styles) {
   const imports = []
