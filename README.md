@@ -63,6 +63,12 @@ If you'd like to add a new bundler, please do!
 6. Update this README's results below
 
 
+## Known Issues
+
+- Parcel configuration isn't set to render in browser
+- Rollup configuration isn't set to render in browser
+
+
 ## Results
 <!---
 If you run a new test, please replace the results here with your results.md that was generated.
