@@ -73,7 +73,7 @@ If you'd like to add a new bundler, please do!
 
 ## Known Issues
 
-- Parcel configuration isn't set to render in browser
+- Parcel configuration ends up with a `require` of the `app.css` in the final bundle, which breaks the browser rendering
 
 
 ## Results
