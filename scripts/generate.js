@@ -40,7 +40,7 @@ const progress = new cliProgress.SingleBar({
 }, cliProgress.Presets.shades_classic)
 
 // TODO this count is off, so fix it someday
-progress.start(args.children ** (args.depth + 1) - 1, 0)
+progress.start(((args.children - args.children ** (args.depth + 1)) / (1 - args.children)) + 1, 0)
 
 function generateDepth(currentPath, id, depth, maxDepth, child, children, styles) {
   const imports = []
