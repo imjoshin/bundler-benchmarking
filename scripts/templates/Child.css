@@ -5,4 +5,5 @@
 
 .child-%CHILD_ID%:hover {
   color: purple;
+  cursor: pointer;
 }
