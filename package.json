@@ -37,6 +37,8 @@
   "scripts": {
     "clean": "rm -rf dist; rm -rf .parcel-cache",
     "serve": "node scripts/serve.js",
+    "test": "node scripts/test.js",
+    "generate": "node scripts/generate.js",
     "build:webpack": "webpack",
     "build:parcel": "parcel build src/index.tsx --no-scope-hoist",
     "build:rollup": "rollup --format iife -c",
