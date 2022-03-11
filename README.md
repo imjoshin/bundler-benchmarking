@@ -85,15 +85,65 @@ If you run a new test, please replace the results here with your results.md that
 ||esbuild|parcel|rollup|webpack|
 |---|---|---|---|---|
 |Success Rate|100%|100%|100%|100%|
-|Build Time|0.18s|0.82s|1.77s|3.18s|
-|Bundle Size|130kb|3kb|2kb|268kb|
+|Build Time|0.17s|0.78s|3.54s|3.21s|
+|Bundle Size|130kb|3kb|126kb|268kb|
 
 ### children=1, depth=3, styles=true
 ||esbuild|parcel|rollup|webpack|
 |---|---|---|---|---|
 |Success Rate|100%|100%|100%|100%|
-|Build Time|0.18s|0.9s|1.83s|3.24s|
-|Bundle Size|131kb|6kb|3kb|273kb|
+|Build Time|0.19s|0.85s|3.64s|3.13s|
+|Bundle Size|131kb|6kb|127kb|273kb|
+
+### children=1, depth=5, styles=true
+||esbuild|parcel|rollup|webpack|
+|---|---|---|---|---|
+|Success Rate|100%|100%|100%|100%|
+|Build Time|0.17s|0.85s|3.74s|3.6s|
+|Bundle Size|133kb|10kb|129kb|279kb|
+
+### children=3, depth=1, styles=true
+||esbuild|parcel|rollup|webpack|
+|---|---|---|---|---|
+|Success Rate|100%|100%|100%|100%|
+|Build Time|0.19s|0.94s|3.97s|3.4s|
+|Bundle Size|131kb|6kb|127kb|273kb|
+
+### children=3, depth=3, styles=true
+||esbuild|parcel|rollup|webpack|
+|---|---|---|---|---|
+|Success Rate|100%|100%|100%|100%|
+|Build Time|0.19s|1.07s|4.8s|4.59s|
+|Bundle Size|152kb|67kb|151kb|382kb|
+
+### children=3, depth=5, styles=true
+||esbuild|parcel|rollup|webpack|
+|---|---|---|---|---|
+|Success Rate|100%|100%|100%|100%|
+|Build Time|0.21s|2.08s|11.19s|13.06s|
+|Bundle Size|342kb|616kb|369kb|1371kb|
+
+### children=5, depth=1, styles=true
+||esbuild|parcel|rollup|webpack|
+|---|---|---|---|---|
+|Success Rate|100%|100%|100%|100%|
+|Build Time|0.18s|0.97s|3.93s|3.4s|
+|Bundle Size|133kb|10kb|129kb|279kb|
+
+### children=5, depth=3, styles=true
+||esbuild|parcel|rollup|webpack|
+|---|---|---|---|---|
+|Success Rate|100%|100%|100%|100%|
+|Build Time|0.19s|1.36s|7.45s|7.83s|
+|Bundle Size|220kb|262kb|229kb|730kb|
+
+### children=5, depth=5, styles=true
+||esbuild|parcel|rollup|webpack|
+|---|---|---|---|---|
+|Success Rate|100%|100%|100%|100%|
+|Build Time|0.5s|55.83s|91.66s|95.68s|
+|Bundle Size|2441kb|6590kb|2745kb|12307kb|
+
 
 
 ## License
