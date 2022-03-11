@@ -68,6 +68,7 @@ If you'd like to add a new bundler, please do!
 - Measure builds in a `watch` mode
 - Measure a second rebuild
 - Measure a second rebuild with files changed
+- Run in docker container to grab peak memory usage
 
 
 ## Known Issues
