@@ -48,41 +48,47 @@ const execute = (cmd, showCommand = true) => {
   return exec(cmd)
 }
 
-const tests = [
-  {children: 1, depth: 1},
-  {children: 1, depth: 5},
-  {children: 3, depth: 1},
-  {children: 3, depth: 3},
-  {children: 5, depth: 1},
-  {children: 5, depth: 3},
-  {children: 5, depth: 5},
-  {children: 5, depth: 8},
-  {children: 10, depth: 1},
-  {children: 10, depth: 3},
-  {children: 10, depth: 5},
-]
+const tests = {
+  children: [1, 3, 5, 8],
+  depth: [1, 3, 5],
+  styles: [true, false],
+  iterations: 5,
+}
+
+async function test(bundler, children, depth, styles, iteration) {
+  await execute(`yarn clean`)
+  const start = Date.now()
+  let success = true
+
+  try {
+    await execute(`yarn build:${bundler}`)
+  } catch {
+    success = false
+  }
+
+  const elapsed = Math.round((Date.now() - start) / 10) / 100;
+  const status = success ? 'succeeded' : `${Red}errored${Reset}`
+
+  const bundleStat = fs.statSync(path.resolve(__dirname, "..", "dist", "app.js"))
+
+  // TODO average, better output, get size of bundle, etc?
+  console.log(`${bundler} ${status} after ${elapsed}s with ${children} children and a depth of ${depth}. Bundle size: ${bundleStat.size}`)
+}
 
 // TODO run two builds to measure second build
 async function runTests() {
-  for ({children, depth} of tests) {
-    await execute(`yarn generate -c ${children} -d ${depth}`)
+  for (const c of tests.children) {
+    for (const d of tests.depth) {
+      for (const s of tests.styles) {
+        await execute(`yarn generate -c ${c} -d ${d} -s ${s ? 'true' : 'false'}`)
 
-    for (bundler of bundlers) {
-      await execute(`yarn clean`)
-      const start = Date.now()
-      let success = true
-      
-      try {
-        await execute(`yarn build:${bundler}`)
-      } catch {
-        success = false
+        for (bundler of bundlers) {
+          for (const i of [...Array(tests.iterations).keys()]) {
+            await test(bundler, c, d, s, i)
+          }
+        }
+        
       }
-
-      const elapsed = Math.round((Date.now() - start) / 10) / 100;
-      const status = success ? 'succeeded' : `${Red}errored${Reset}`
-
-      // TODO average, better output, get size of bundle, etc?
-      console.log(`${bundler} ${status} after ${elapsed}s with ${children} children and a depth of ${depth}`)
     }
   }
 }
