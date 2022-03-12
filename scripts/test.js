@@ -74,8 +74,6 @@ async function test(bundler, children, depth, styles, iteration) {
     bundleSize += styleStat.size
   }
 
-  console.log(`${bundler} ${status} after ${elapsed}s with c=${children}, d=${depth}, and styles=${styles ? 'true' : 'false'}. Bundle size: ${bundleSize}`)
-
   return {
     success,
     time: elapsed, 
@@ -124,11 +122,23 @@ async function runTests() {
           totalComponents = c + 1
         }
 
+        const logFields = [
+          `Children: ${Cyan}${c}${Reset}`,
+          `Depth: ${Cyan}${d}${Reset}`,
+          `Components: ${Cyan}${totalComponents}${Reset}`,
+          `Styles: ${Cyan}${s ? 'true' : 'false'}${Reset}`,
+        ].join(', ')
+        console.log(`\n  ${logFields}`)
+        console.log(Array(logFields.length - (8 * 4)).fill('-').join(''))
+
         await execute(`yarn generate -c ${c} -d ${d} -s ${s ? 'true' : 'false'}`)
 
         let results = {}
 
         for (bundler of bundlers) {
+          if (bundlers.length) {
+            console.log(`Testing ${Yellow}${bundler}${Reset}`)
+          }
           let final = {success: 0, time: 0, size: 0}
 
           for (const i of [...Array(testCases.iterations).keys()]) {
