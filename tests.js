@@ -2,7 +2,8 @@ exports.availableBundlers = [
   'esbuild', 
   'parcel', 
   'rollup', 
-  'webpack'
+  'webpack',
+  'webpack-swc',
 ]
 
 exports.testCases = {
