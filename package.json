@@ -1,8 +1,7 @@
 {
   "name": "bundler-benchmarking",
   "version": "1.0.0",
-  "main": "dist/app.js",
-  "browserslist": "> 0.5%, last 2 versions, not dead",
+  "browserslist": "> 5%",
   "repository": "https://github.com/j0sh77/bundler-benchmarking",
   "author": "Josh <jcjohnson77@gmail.com>",
   "license": "MIT",
@@ -14,6 +13,8 @@
   "devDependencies": {
     "@babel/core": "^7.17.5",
     "@babel/preset-react": "^7.16.7",
+    "@parcel/config-default": "^2.3.2",
+    "@parcel/transformer-typescript-tsc": "^2.3.2",
     "@rollup/plugin-commonjs": "^21.0.2",
     "@rollup/plugin-node-resolve": "^13.1.3",
     "@rollup/plugin-replace": "^4.0.0",
@@ -51,7 +52,7 @@
     "generate": "node scripts/generate.js",
     "build:webpack": "webpack --config webpack.config.js",
     "build:webpack-swc": "webpack --config webpack-swc.config.js",
-    "build:parcel": "parcel build src/index.tsx --no-scope-hoist",
+    "build:parcel": "parcel build src/index.parcel.html --no-scope-hoist && mv dist/index.parcel.html dist/index.html",
     "build:rollup": "rollup --format iife -c rollup.config.js",
     "build:rollup-terser": "rollup --format iife -c rollup-terser.config.js",
     "build:esbuild": "esbuild src/index.tsx --bundle --minify --outfile=dist/app.js --target=chrome58 --define:process.env.BUNDLER_NAME='\"esbuild\"'"
