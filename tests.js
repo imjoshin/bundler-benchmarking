@@ -1,7 +1,8 @@
 exports.availableBundlers = [
   'esbuild', 
   'parcel', 
-  'rollup', 
+  'rollup',
+  'rollup-terser',
   'webpack',
   'webpack-swc',
 ]
