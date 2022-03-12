@@ -59,7 +59,6 @@ async function test(bundler, children, depth, styles, iteration) {
   }
 
   const elapsed = Math.round((Date.now() - start) / 10) / 100;
-  const status = success ? 'succeeded' : `${Red}errored${Reset}`
 
   const dist = path.resolve(__dirname, "..", "dist")
   let bundleSize = 0
@@ -75,7 +74,7 @@ async function test(bundler, children, depth, styles, iteration) {
   }
 
   return {
-    success,
+    success: success && (bundleSize > 0),
     time: elapsed, 
     size: bundleSize
   }
