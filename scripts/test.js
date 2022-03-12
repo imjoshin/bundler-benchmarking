@@ -80,8 +80,8 @@ async function test(bundler, children, depth, styles, iteration) {
   }
 }
 
-function writeCSV(file, totalComponents, i, c, d, s, time, size, success) {
-  fs.appendFileSync(file, [totalComponents, i, c, d, s, time, size, success].join(",") + "\n");
+function writeCSV(file, bundler, totalComponents, i, c, d, s, time, size, success) {
+  fs.appendFileSync(file, [bundler, totalComponents, i, c, d, s, time, size, success].join(",") + "\n");
 }
 
 function formatResults(c, d, s, results, totalComponents) {
@@ -109,7 +109,7 @@ async function runTests() {
   const markdownResults = path.resolve(__dirname, '..', 'results.md')
   fs.writeFileSync(markdownResults, "")
   const csvResults = path.resolve(__dirname, '..', 'results.csv')
-  fs.writeFileSync(csvResults, "components, iteration, children, depth, styles, time, bundle_size, success\n")
+  fs.writeFileSync(csvResults, "bundler, components, iteration, children, depth, styles, time, bundle_size, success\n")
 
   for (const s of testCases.styles) {
     for (const c of testCases.children) {
@@ -149,7 +149,7 @@ async function runTests() {
               final.size += result.size
             }
 
-            writeCSV(csvResults, totalComponents, i, c, d, s, result.time, result.size, result.success)
+            writeCSV(csvResults, bundler, totalComponents, i, c, d, s, result.time, result.size, result.success)
           }
 
           results[bundler] = {
