@@ -62,15 +62,18 @@ async function test(bundler, children, depth, styles, iteration) {
   const status = success ? 'succeeded' : `${Red}errored${Reset}`
 
   const dist = path.resolve(__dirname, "..", "dist")
-  const bundleStat = fs.statSync(path.resolve(dist, "app.js"))
-  let bundleSize = bundleStat.size
+  let bundleSize = 0
+  
+  if (fs.existsSync(path.resolve(dist, 'app.js'))) {
+    const bundleStat = fs.statSync(path.resolve(dist, "app.js"))
+    bundleSize += bundleStat.size
+  }
 
-  if (!fs.existsSync(path.resolve(dist, 'app.css'))) {
-    const styleStat = fs.statSync(path.resolve(dist, "app.js"))
+  if (fs.existsSync(path.resolve(dist, 'app.css'))) {
+    const styleStat = fs.statSync(path.resolve(dist, "app.css"))
     bundleSize += styleStat.size
   }
 
-  // TODO average, better output, get size of bundle, etc?
   console.log(`${bundler} ${status} after ${elapsed}s with c=${children}, d=${depth}, and styles=${styles ? 'true' : 'false'}. Bundle size: ${bundleSize}`)
 
   return {
@@ -80,18 +83,15 @@ async function test(bundler, children, depth, styles, iteration) {
   }
 }
 
-function formatResults(c, d, s, results) {
+function writeCSV(file, totalComponents, i, c, d, s, time, size, success) {
+  fs.appendFileSync(file, [totalComponents, i, c, d, s, time, size, success].join(",") + "\n");
+}
+
+function formatResults(c, d, s, results, totalComponents) {
   const bundlers = Object.keys(results).sort()
   const success = bundlers.map((b) => results[b].success * 100 + "%")
   const time = bundlers.map((b) => Math.round(results[b].time * 100) / 100 + "s")
   const size = bundlers.map((b) => Math.round(results[b].size / 1024) + "kb")
-
-  let totalComponents = (c - c ** (d + 1)) / (1 - c) + 1
-  if (c === 1) {
-    totalComponents = d + 1
-  } else if (d === 1) {
-    totalComponents = c + 1
-  }
 
   const output = [
     `### Total components: ${totalComponents}`, 
@@ -109,12 +109,21 @@ function formatResults(c, d, s, results) {
 
 // TODO run two builds to measure second build
 async function runTests() {
-  const resultsFile = path.resolve(__dirname, '..', 'results.md')
-  fs.writeFileSync(resultsFile, "")
+  const markdownResults = path.resolve(__dirname, '..', 'results.md')
+  fs.writeFileSync(markdownResults, "")
+  const csvResults = path.resolve(__dirname, '..', 'results.csv')
+  fs.writeFileSync(csvResults, "components, iteration, children, depth, styles, time, bundle_size, success\n")
 
   for (const s of testCases.styles) {
     for (const c of testCases.children) {
       for (const d of testCases.depth) {
+        let totalComponents = (c - c ** (d + 1)) / (1 - c) + 1
+        if (c === 1) {
+          totalComponents = d + 1
+        } else if (d === 1) {
+          totalComponents = c + 1
+        }
+
         await execute(`yarn generate -c ${c} -d ${d} -s ${s ? 'true' : 'false'}`)
 
         let results = {}
@@ -125,10 +134,13 @@ async function runTests() {
           for (const i of [...Array(testCases.iterations).keys()]) {
             const result = await test(bundler, c, d, s, i)
             final.success += result.success ? 1 : 0
+
             if (result.success) {
               final.time += result.time
               final.size += result.size
             }
+
+            writeCSV(csvResults, totalComponents, i, c, d, s, result.time, result.size, result.success)
           }
 
           results[bundler] = {
@@ -138,8 +150,8 @@ async function runTests() {
           }
         }
 
-        const formatted = formatResults(c, d, s, results)
-        fs.appendFileSync(resultsFile, formatted + "\n\n");
+        const formatted = formatResults(c, d, s, results, totalComponents)
+        fs.appendFileSync(markdownResults, formatted + "\n\n");
       }
     }
   }

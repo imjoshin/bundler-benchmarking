@@ -6,8 +6,8 @@ exports.availableBundlers = [
 ]
 
 exports.testCases = {
-  children: [1, 3, 5, 8, 10],
-  depth: [1, 3, 5],
+  children: [1, 2, 3, 4, 5, 6, 7],
+  depth: [1, 2, 3, 4, 5],
   styles: [true, false],
-  iterations: 5,
+  iterations: 4,
 }
