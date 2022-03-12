@@ -10,7 +10,7 @@ import pkg from './package.json'
 export default {
   input: './src/index.tsx',
   output: {
-    file: pkg.main,
+    file: 'dist/app.js',
     format: 'iife',
     sourcemap: false,
     globals: {
