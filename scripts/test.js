@@ -62,16 +62,14 @@ async function test(bundler, children, depth, styles, iteration) {
 
   const dist = path.resolve(__dirname, "..", "dist")
   let bundleSize = 0
-  
-  if (fs.existsSync(path.resolve(dist, 'app.js'))) {
-    const bundleStat = fs.statSync(path.resolve(dist, "app.js"))
-    bundleSize += bundleStat.size
-  }
 
-  if (fs.existsSync(path.resolve(dist, 'app.css'))) {
-    const styleStat = fs.statSync(path.resolve(dist, "app.css"))
-    bundleSize += styleStat.size
-  }
+  // TODO this measurement isn't great, but it works for now
+  fs.readdirSync(dist).forEach(file => {
+    if (file.endsWith(".css") || file.endsWith(".js") || file.endsWith(".html")) {
+      const fileStat = fs.statSync(path.resolve(dist, file))
+      bundleSize += fileStat.size
+    }
+  });
 
   return {
     success: success && (bundleSize > 0),
