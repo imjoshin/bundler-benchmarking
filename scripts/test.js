@@ -63,13 +63,15 @@ async function test(bundler, children, depth, styles, iteration) {
   const dist = path.resolve(__dirname, "..", "dist")
   let bundleSize = 0
 
-  // TODO this measurement isn't great, but it works for now
-  fs.readdirSync(dist).forEach(file => {
-    if (file.endsWith(".css") || file.endsWith(".js") || file.endsWith(".html")) {
-      const fileStat = fs.statSync(path.resolve(dist, file))
-      bundleSize += fileStat.size
-    }
-  });
+  if (fs.existsSync(dist)) {
+    // TODO this measurement isn't great, but it works for now
+    fs.readdirSync(dist).forEach(file => {
+      if (file.endsWith(".css") || file.endsWith(".js") || file.endsWith(".html")) {
+        const fileStat = fs.statSync(path.resolve(dist, file))
+        bundleSize += fileStat.size
+      }
+    });
+  }
 
   return {
     success: success && (bundleSize > 0),
@@ -84,7 +86,7 @@ function writeCSV(file, bundler, totalComponents, i, c, d, s, time, size, succes
 
 function formatResults(c, d, s, results, totalComponents) {
   const bundlers = Object.keys(results).sort()
-  const success = bundlers.map((b) => results[b].success * 100 + "%")
+  const success = bundlers.map((b) => results[b].passes)
   const time = bundlers.map((b) => Math.round(results[b].time * 100) / 100 + "s")
   const size = bundlers.map((b) => Math.round(results[b].size / 1024) + "kb")
 
@@ -94,7 +96,7 @@ function formatResults(c, d, s, results, totalComponents) {
     ``,
     `||${bundlers.join("|")}|`,
     `|---|${bundlers.map(() => "---").join("|")}|`,
-    `|Success Rate|${success.join("|")}|`,
+    `|Passes|${success.join("|")}|`,
     `|Build Time|${time.join("|")}|`,
     `|Bundle Size|${size.join("|")}|`,
   ]
@@ -151,7 +153,7 @@ async function runTests() {
           }
 
           results[bundler] = {
-            success: final.success / testCases.iterations,
+            passes: `${final.success}/${testCases.iterations}`,
             time: final.time / testCases.iterations,
             size: final.size / testCases.iterations,
           }
