@@ -19,19 +19,19 @@ const White = "\x1b[37m"
 
 const args = require('yargs')
   .scriptName("test")
-  .usage('Usage: $0 -d {depth} -c {children} -s true')
+  .usage('Usage: $0 -o {output name} -b {bundler}')
+  .option('output', {
+    alias: 'o',
+    description: 'The name of the output name (without extension) in ./results',
+    type: 'string',
+    demandOption: true,
+  })
   .option('bundler', {
     alias: 'b',
     default: 'all',
     description: 'The bundler to test',
     type: 'string',
     choices: ['all', ...availableBundlers]
-  })
-  .option('iterations', {
-    alias: 'i',
-    default: 10,
-    description: 'The number of iterations for each test',
-    type: 'number',
   })
   .help('h')
   .alias('h', 'help')
@@ -106,9 +106,9 @@ function formatResults(c, d, s, results, totalComponents) {
 
 // TODO run two builds to measure second build
 async function runTests() {
-  const markdownResults = path.resolve(__dirname, '..', 'results.md')
+  const markdownResults = path.resolve(__dirname, '..', 'results', `${args.output}.md`)
   fs.writeFileSync(markdownResults, "")
-  const csvResults = path.resolve(__dirname, '..', 'results.csv')
+  const csvResults = path.resolve(__dirname, '..', 'results', `${args.output}.csv`)
   fs.writeFileSync(csvResults, "bundler, components, iteration, children, depth, styles, time, bundle_size, success\n")
 
   for (const s of testCases.styles) {
