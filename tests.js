@@ -6,6 +6,7 @@ exports.availableBundlers = [
   'rollup-terser',
   'webpack',
   'webpack-swc',
+  'vite',
 ]
 
 exports.testCases = {

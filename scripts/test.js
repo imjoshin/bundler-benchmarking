@@ -127,6 +127,7 @@ async function runTests() {
           `Components: ${Cyan}${totalComponents}${Reset}`,
           `Styles: ${Cyan}${s ? 'true' : 'false'}${Reset}`,
         ].join(', ')
+        
         console.log(`\n  ${logFields}`)
         console.log(Array(logFields.length - (8 * 4)).fill('-').join(''))
 
