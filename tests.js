@@ -5,6 +5,7 @@ exports.availableBundlers = [
   'rollup',
   'rollup-terser',
   'webpack',
+  'webpack-esbuild',
   'webpack-swc',
   'vite',
 ]

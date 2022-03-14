@@ -55,6 +55,7 @@
     "generate": "node scripts/generate.js",
     "build:webpack": "webpack --config webpack.config.js",
     "build:webpack-swc": "webpack --config webpack-swc.config.js",
+    "build:webpack-esbuild": "webpack --config webpack-esbuild.config.js",
     "build:parcel": "parcel build src/index.parcel.html --config ./default.config.parcelrc --no-scope-hoist && mv dist/index.parcel.html dist/index.html",
     "build:parcel-css": "parcel build src/index.parcel.html --config ./css.config.parcelrc --no-scope-hoist && mv dist/index.parcel.html dist/index.html",
     "build:rollup": "rollup --format iife -c rollup.config.js",

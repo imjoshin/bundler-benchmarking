@@ -10,17 +10,10 @@ module.exports = {
       {
         test: /\.tsx?$/,
         exclude: /(node_modules|bower_components)/,
-        use: {
-          // Use `.swcrc` to configure swc
-          loader: "swc-loader",
-          options: {
-            sync: true,
-            jsc: {
-              parser: {
-                syntax: "typescript"
-              }
-            }
-          }
+        loader: 'esbuild-loader',
+        options: {
+          loader: 'tsx',
+          target: 'es2015',
         }
       },
       {
@@ -33,7 +26,7 @@ module.exports = {
     new MiniCssExtractPlugin({filename: 'app.css'}),
     new webpack.DefinePlugin({
       'process.env': {
-        BUNDLER_NAME: JSON.stringify('webpack-swc'),
+        BUNDLER_NAME: JSON.stringify('webpack-esbuild'),
       }
     }),
   ],
